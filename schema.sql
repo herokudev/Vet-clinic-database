@@ -12,3 +12,7 @@ timestamp timestamp,
 primary key (id)
 );
 
+----- PART 2
+ALTER TABLE
+animals 
+ADD COLUMN IF NOT EXISTS species VARCHAR(100);
