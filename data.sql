@@ -52,7 +52,7 @@ VALUES ('Digimon');
 UPDATE animals
 SET species_id = species.id
 FROM species
-WHERE animals.name LIKE '%mon%'
+WHERE animals.name LIKE '%mon'
   AND species.name LIKE 'Digimon';
 
   UPDATE animals
