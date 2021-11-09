@@ -24,11 +24,11 @@ This repository includes files with plain SQL that can be used to recreate a dat
 
 👨‍💻**Nelsino Francisco**
 
-## 🤝 Contributing
-
 - GitHub: [@nelsinofrancisco](https://github.com/nelsinofrancisco)
 - LinkedIn: [LinkedIn](https://www.linkedin.com/in/nelsinofrancisco/)
-  
+
+## 🤝 Contributing
+
 Contributions, issues, and feature requests are welcome!
 
 ## Show your support
