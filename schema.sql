@@ -1,4 +1,10 @@
-/* Database schema to keep the structure of entire database. */
+DROP TABLE IF EXISTS  animals CASCADE;
+DROP TABLE IF EXISTS owners CASCADE;
+DROP TABLE IF EXISTS species CASCADE;
+DROP TABLE IF EXISTS vets CASCADE;
+DROP TABLE IF EXISTS specializations;
+DROP TABLE IF EXISTS visits;
+
 
 create table animals (
 id serial,
@@ -28,7 +34,7 @@ CREATE TABLE owners
 CREATE TABLE species
 (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(100),
+    name VARCHAR(100)
 );
 
 ALTER TABLE animals
@@ -66,3 +72,5 @@ CREATE TABLE visits (
     CONSTRAINT visits_fk_1 FOREIGN KEY (vet_id) REFERENCES vets(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT visits_fk FOREIGN KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE ON UPDATE CASCADE
 ); 
+
+ALTER TABLE owners ADD COLUMN email VARCHAR(120);
