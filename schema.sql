@@ -1,4 +1,10 @@
-/* Database schema to keep the structure of entire database. */
+DROP TABLE IF EXISTS  animals CASCADE;
+DROP TABLE IF EXISTS owners CASCADE;
+DROP TABLE IF EXISTS species CASCADE;
+DROP TABLE IF EXISTS vets CASCADE;
+DROP TABLE IF EXISTS specializations;
+DROP TABLE IF EXISTS visits;
+
 
 create table animals (
 id serial,
