@@ -6,22 +6,22 @@ insert into animals values (default, 'Pikachu', '20210107', 1, false, 15.04, CUR
 insert into animals values (default, 'Devimon', '20170512', 5, true, 8.00, CURRENT_USER, now() );
 
 ----- PART 2
-INSERT INTO public.animals (name , date_of_birth , escape_attempts , neutered , weight_kg)
+INSERT INTO public.animals (name , date_of_birth , escape_attemts , neutered , weight_kg)
 VALUES ('Charmander', 'FEB-08-2020', 0, FALSE, -11);
 
-INSERT INTO public.animals (name , date_of_birth , escape_attempts , neutered , weight_kg)
+INSERT INTO public.animals (name , date_of_birth , escape_attemts , neutered , weight_kg)
 VALUES ('Plantmon', 'NOV-15-2022', 2, TRUE, -5.7);
 
-INSERT INTO public.animals (name , date_of_birth , escape_attempts , neutered , weight_kg)
+INSERT INTO public.animals (name , date_of_birth , escape_attemts , neutered , weight_kg)
 VALUES ('Squirtle', 'APR-02-1993', 3, FALSE, -12.13);
 
-INSERT INTO public.animals (name , date_of_birth , escape_attempts , neutered , weight_kg)
+INSERT INTO public.animals (name , date_of_birth , escape_attemts , neutered , weight_kg)
 VALUES ('Angemon', 'JUN-12-2005', 1, TRUE, -45);
 
-INSERT INTO public.animals (name , date_of_birth , escape_attempts , neutered , weight_kg)
+INSERT INTO public.animals (name , date_of_birth , escape_attemts , neutered , weight_kg)
 VALUES ('Boarmon', 'JUN-07-2005', 7, TRUE, 20.04);
 
-INSERT INTO public.animals (name , date_of_birth , escape_attempts , neutered , weight_kg)
+INSERT INTO public.animals (name , date_of_birth , escape_attemts , neutered , weight_kg)
 VALUES ('Blossom', 'OCT-13-1998', 3, TRUE, 17);
 
 ----- PART 3
@@ -263,3 +263,7 @@ SELECT a.id, v.id, '2020-01-11'
 FROM animals a 
 JOIN vets v 
 ON a.name = 'Blossom' AND v.name = 'William Tatcher';
+
+INSERT INTO visits (animal_id, vet_id, date) SELECT * FROM (SELECT id FROM animals) animal_ids, (SELECT id FROM vets) vets_ids, generate_series('1980-01-01'::timestamp, '2021-01-01', '4 hours') visit_timestamp;
+
+insert into owners (full_name, email) select 'Owner ' || generate_series(1,2500000), 'owner_' || generate_series(1,2500000) || '@mail.com';
