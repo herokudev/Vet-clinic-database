@@ -1,78 +1,91 @@
-DROP TABLE IF EXISTS owners CASCADE;
-DROP TABLE IF EXISTS species CASCADE;
-DROP TABLE IF EXISTS vets CASCADE;
-DROP TABLE IF EXISTS animals CASCADE;
-DROP TABLE IF EXISTS specializations;
-DROP TABLE IF EXISTS visits;
+DROP TABLE IF EXISTS patients CASCADE;
+DROP TABLE IF EXISTS medical_histories CASCADE;
+DROP TABLE IF EXISTS treatments CASCADE;
+DROP TABLE IF EXISTS treatment_histories;
+DROP TABLE IF EXISTS invoices CASCADE;
+DROP TABLE IF EXISTS invoice_items;
 
-CREATE TABLE owners (
+
+CREATE TABLE patients(
   id INT GENERATED ALWAYS AS IDENTITY,
-  full_name varchar(80) NOT NULL,
-  age INT NOT NULL,
+  name varchar(120) NOT NULL,
+  date_of_birth date,
   PRIMARY KEY(id)
 );
 
-CREATE TABLE species (
+CREATE TABLE medical_histories(
   id INT GENERATED ALWAYS AS IDENTITY,
-  name varchar(80) NOT NULL,
-  PRIMARY KEY(id)
-);
-
-CREATE TABLE vets(
-  id INT GENERATED ALWAYS AS IDENTITY,
-  name varchar(80) NOT NULL,
-  age INT NOT NULL,
-  date_of_graduation date NOT NULL,
-  PRIMARY KEY(id)
-);
-
-CREATE TABLE animals (
-    id INT GENERATED ALWAYS AS IDENTITY,
-    name varchar(80) NOT NULL,
-    date_of_birth date NOT NULL,
-    escape_attempts INT,
-    neutered boolean NOT NULL,
-    weigth_kg float NOT NULL,
-    species_id INT,
-    owner_id INT,
-    PRIMARY KEY(id),
-    CONSTRAINT fk_species
-      FOREIGN KEY(species_id)
-        REFERENCES species(id)
+  admitted_at timestamp NOT NULL,
+  patient_id INT,
+  status varchar,
+  CONSTRAINT fk_patient_id
+      FOREIGN KEY(patient_id)
+        REFERENCES patients(id)
           ON DELETE CASCADE,
-    CONSTRAINT fk_owners
-      FOREIGN KEY(owner_id)
-        REFERENCES owners(id)
-          ON DELETE CASCADE
+  PRIMARY KEY(id)
 );
 
-CREATE TABLE specializations(
+CREATE INDEX patient_id_idx ON medical_histories(patient_id);
+
+CREATE TABLE treatments(
   id INT GENERATED ALWAYS AS IDENTITY,
-  specie_id INT NOT NULL,
-  vet_id INT NOT NULL,
-  CONSTRAINT fk_species
-    FOREIGN KEY(specie_id)
-      REFERENCES species(id)
-        ON DELETE CASCADE,
-  CONSTRAINT fk_vets
-    FOREIGN KEY(vet_id)
-      REFERENCES vets(id)
+  type varchar NOT NULL,
+  name varchar NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE treatment_histories(
+  id INT GENERATED ALWAYS AS IDENTITY,
+  medical_history_id INT,
+  treatment_id INT,
+  CONSTRAINT fk_medical_history_id
+      FOREIGN KEY(medical_history_id)
+        REFERENCES medical_histories(id)
+          ON DELETE CASCADE,
+  CONSTRAINT fk_treatment_id
+      FOREIGN KEY(treatment_id)
+        REFERENCES treatments(id)
+          ON DELETE CASCADE,
+  PRIMARY KEY(id)
+);
+
+CREATE INDEX medical_history_id_idx ON treatment_histories(medical_history_id);
+CREATE INDEX treatment_id_idx ON treatment_histories(treatment_id);
+
+CREATE TABLE invoices(
+  id INT GENERATED ALWAYS AS IDENTITY,
+  total_amount decimal NOT NULL,
+  generated_at timestamp NOT NULL,
+  payed_at timestamp NOT NULL,
+  medical_history_id int,
+  CONSTRAINT fk_medical_history_id
+    FOREIGN KEY (medical_history_id)
+      REFERENCES medical_histories(id)
         ON DELETE CASCADE,
   PRIMARY KEY(id)
 );
 
-CREATE TABLE visits(
+CREATE INDEX invoices_medical_history_id_idx ON invoices(medical_history_id);
+
+
+
+CREATE TABLE invoice_items(
   id INT GENERATED ALWAYS AS IDENTITY,
-  animal_id INT NOT NULL,
-  vet_id INT NOT NULL,
-  date_of_visit date NOT NULL,
-  CONSTRAINT fk_animals
-    FOREIGN KEY(animal_id)
-      REFERENCES animals(id)
-        ON DELETE CASCADE,
-  CONSTRAINT fk_vets
-    FOREIGN KEY(vet_id)
-      REFERENCES vets(id)
-        ON DELETE CASCADE,
+  unit_price decimal NOT NULL,
+  quantity INT NOT NULL,
+  total_price decimal NOT NULL,
+  invoice_id INT,
+  treatment_id INT,
+  CONSTRAINT fk_invoice_id
+      FOREIGN KEY(invoice_id)
+        REFERENCES invoices(id)
+          ON DELETE CASCADE,
+  CONSTRAINT fk_treatment_id
+      FOREIGN KEY(treatment_id)
+        REFERENCES treatments(id)
+          ON DELETE CASCADE,
   PRIMARY KEY(id)
 );
+
+CREATE INDEX invoice_id_idx ON invoice_items(invoice_id);
+CREATE INDEX invoice_items_treatment_id_idx ON invoice_items(treatment_id);
